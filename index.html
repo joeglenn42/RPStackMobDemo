@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RP StackMob JS Demo</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
+
+		<script type="text/javascript">
+			// Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
+      		// Your other app information is here: https://dashboard.stackmob.com/settings
+      		StackMob.init({
+        		publicKey: '2109fd4e-35b1-4d0b-a6b8-be290fa0bd09',
+        		apiVersion : 0
+      		});
+
+      		var Data = StackMob.Model.extend({
+      			schemaName : 'data'
+      		});
+      		
+      		$(document).ready(function() {
+
+	      		$("#submitButton").on("click", function() {
+					/**
+					 * The keys below must remain alpha lower-case, cannot 
+					 * be camel case as per stackmob requirements
+					 */
+		      		var data = new Data({
+			      		singleline: document.getElementById("singleLine").value,
+			      		multilinetext: document.getElementById("multiLine").value,
+			      		list: document.getElementById("list").value,
+				  		radioone: document.getElementById("radioOne").checked,
+				  		radiotwo: document.getElementById("radioTwo").checked,
+				  		integer: document.getElementById("integer").value,
+				  		date: document.getElementById("date").value
+		      		});
+		      		
+		      		data.create({
+		      			success: function(model, result, options) {
+		      				//console.debug(model.toJSON());
+			      			document.getElementById("debugOutput").innerHTML = "<h3 class='text-success'>Success!</h3>";
+		      			},
+			  			error: function(model, error, options) {
+			  				//console.debug(error);
+				  			document.getElementById("debugOutput").innerHTML = "<h3 class='text-error'>Failure!</h3>";
+			  			}
+			  		});
+	      		});
+      		});//$(document).ready()
+      	</script>
+  
+	</head>
+
+	<body>
+		<div id="dataEntryForm" class="container-fluid">
+			<div class="row-fluid">
+				<div id="leftContent" class="span3">
+					
+					<h3>StackMob Test Form</h3>
+					
+			    	<p>Single line text:</p>
+			    	<input type="text" id="singleLine">
+			    	
+			        <p>Multi-line text:</p>
+			        <textarea id="multiLine" rows="3"></textarea>
+			        <br>
+			        List:
+			        <br>
+			        <select id="list">
+			        	<option value="listOne">One</option>
+			        	<option value="listTwo">Two</option>
+			        	<option value="listThree">Three</option>
+			        	<option value="listFour">Four</option>
+			        </select>
+			        <br>
+			        Radio 1 <input type="radio" id="radioOne" value="">
+			        <br>
+			        Radio 2 <input type="radio" id="radioTwo" value="">
+			        <br>
+			        Integer
+			        <br>
+			        <input type="number" id="integer">
+			        <br>
+			        Date
+			        <br>
+			        <input type="date" id="date">
+			        <br>
+			        <button id="submitButton" class="btn btn-primary">Submit</button>
+					<h4>Result:</h4><div id="debugOutput"></div>
+					
+				</div>
+				<div id="rightContent" class="span9">
+					
+					<h3>Entries</h3>
+					
+					
+					
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
