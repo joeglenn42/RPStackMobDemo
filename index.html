@@ -8,46 +8,127 @@
 		<script type="text/javascript" src="http://static.stackmob.com/js/stackmob-js-0.9.1-bundled-min.js"></script>
 
 		<script type="text/javascript">
-			// Copy your init data from here: https://dashboard.stackmob.com/sdks/js/config
-      		// Your other app information is here: https://dashboard.stackmob.com/settings
+
+      		/*****************************************************
+      		 * Initialization, Types, and Global Variables
+      		 *****************************************************/
+
+      		/**
+      		 * StackMob Init
+      		 */
       		StackMob.init({
         		publicKey: '2109fd4e-35b1-4d0b-a6b8-be290fa0bd09',
         		apiVersion : 0
       		});
 
+	  		/**
+	  		 * Data Types
+	  		 */
       		var Data = StackMob.Model.extend({
       			schemaName : 'data'
       		});
+
+      		/**
+      		 * Data Collection Type
+      		 */
+      		var Datas = StackMob.Collection.extend({
+	      		model : Data
+      		});
+
+      		/**
+      		 * Global Variables
+      		 */
+      		//var list; /* results from query */
+      		
+      		/*****************************************************
+      		 * Custom Functions
+      		 *****************************************************/
+
+	  		/**
+	  		 * submitForm()
+	  		 * Submits the form to StackMob
+	  		 */
+	  		 function submitForm() {
+	  		 
+				var data = new Data({
+					singleline: document.getElementById("singleLine").value,
+					multiline: document.getElementById("multiLine").value,
+					list: document.getElementById("list").value,
+					radioone: document.getElementById("radioOne").checked,
+					radiotwo: document.getElementById("radioTwo").checked,
+					integer: document.getElementById("integer").value,
+					date: document.getElementById("date").value
+				}); //keys must remain lowercase
+				
+				data.create({
+					success: function(model, result, options) {
+						//console.debug(model.toJSON());
+						document.getElementById("debugOutput").innerHTML = "<h3 class='text-success'>Success!</h3>";
+					},
+					error: function(model, error, options) {
+						//console.debug(error);
+						document.getElementById("debugOutput").innerHTML = "<h3 class='text-error'>Failure!</h3>";
+					}
+				});
+	  		 }
+
+      		/**
+      		 * refreshTable()
+      		 * Refreshes the data entry table
+      		 */
+      		function refreshTable() {
+      		
+	      		var q = new StackMob.Collection.Query();
+		  		q.orderAsc('createddate');
+		  		
+		  		var list = new Datas();
+		  		list.query(q, {
+			  		success: function(collection) {
+				  		console.debug(collection.toJSON());
+				  		console.log(list.length + " elements in the list.");
+				  		
+					  	for (var i = 0; i < list.length; i++) {
+/*
+					  		var str = "<tr>";
+					  		var item = list[i];
+					  		str += "<td>" + item.get('singleline') + "</td>";
+					  		str += "<td>" + list[i].get('multiline') + "</td>";
+					  		str += "<td>" + list[i].get('list') + "</td>";
+					  		str += "<td>" + list[i].get('radioOne') + "</td>";
+					  		str += "<td>" + list[i].get('radioTwo') + "</td>";
+					  		str += "<td>" + list[i].get('integer') + "</td>";
+					  		str += "<td>" + list[i].get('date') + "</td>";
+		
+					  		str += "</tr>";
+					  		
+					  		document.getElementById("tableBody").innerHTML += str;
+					  		console.log(str);
+		
+							console.log("refreshTable()");
+							console.log(list[i].get('singleline'));
+*/
+						}
+			  		}
+		  		});
+		  		
+
+      		}
+      		
+      		/*****************************************************
+      		 * Document Ready
+      		 *****************************************************/
       		
       		$(document).ready(function() {
 
 	      		$("#submitButton").on("click", function() {
-					/**
-					 * The keys below must remain alpha lower-case, cannot 
-					 * be camel case as per stackmob requirements
-					 */
-		      		var data = new Data({
-			      		singleline: document.getElementById("singleLine").value,
-			      		multilinetext: document.getElementById("multiLine").value,
-			      		list: document.getElementById("list").value,
-				  		radioone: document.getElementById("radioOne").checked,
-				  		radiotwo: document.getElementById("radioTwo").checked,
-				  		integer: document.getElementById("integer").value,
-				  		date: document.getElementById("date").value
-		      		});
-		      		
-		      		data.create({
-		      			success: function(model, result, options) {
-		      				//console.debug(model.toJSON());
-			      			document.getElementById("debugOutput").innerHTML = "<h3 class='text-success'>Success!</h3>";
-		      			},
-			  			error: function(model, error, options) {
-			  				//console.debug(error);
-				  			document.getElementById("debugOutput").innerHTML = "<h3 class='text-error'>Failure!</h3>";
-			  			}
-			  		});
+	      		
+			  		submitForm();
+			  		refreshTable();
+			  		
 	      		});
+	      		
       		});//$(document).ready()
+
       	</script>
   
 	</head>
@@ -93,8 +174,55 @@
 				<div id="rightContent" class="span9">
 					
 					<h3>Entries</h3>
-					
-					
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th colspan="7">Data on StackMob</th>
+							</tr>
+							<tr>
+								<th>Single</th>
+								<th>Mult</th>
+								<th>List</th>
+								<th>Radio1</th>
+								<th>Radio2</th>
+								<th>Integer</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody id="tableBody">
+						<!-- The following table rows are placeholders for eventual data -->
+<!--
+						<tr>
+							<td>java single</td>
+							<td>java multi</td>
+							<td>java list</td>
+							<td>java radio1</td>
+							<td>java radio2</td>
+							<td>java integer</td>
+							<td>java date</td>
+						</tr>
+						<tr>
+							<td>java single</td>
+							<td>java multi</td>
+							<td>java list</td>
+							<td>java radio1</td>
+							<td>java radio2</td>
+							<td>java integer</td>
+							<td>java date</td>
+						</tr>
+						<tr>
+							<td>java single</td>
+							<td>java multi</td>
+							<td>java list</td>
+							<td>java radio1</td>
+							<td>java radio2</td>
+							<td>java integer</td>
+							<td>java date</td>
+						</tr>
+-->
+						<!-- End of row placeholder data -->
+						</tbody>
+					</table>
 					
 				</div>
 			</div>
