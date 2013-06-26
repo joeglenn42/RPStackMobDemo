@@ -40,6 +40,14 @@
       		 *****************************************************/
 
 	  		/**
+	  		 * validateForm()
+	  		 * Validates the form and verifies required fields
+	  		 */
+	  		 function validateForm() {
+		  		 
+	  		 }
+
+	  		/**
 	  		 * submitForm()
 	  		 * Submits the form to StackMob
 	  		 */
@@ -72,7 +80,7 @@
       		 * Refreshes the data entry table
       		 */
       		function refreshTable() {
-		  		document.getElementById("tableBody").innerHTML = "Refreshing..";
+		  		document.getElementById("tableBody").innerHTML = "";
 		  		
 	      		var q = new StackMob.Collection.Query();
 		  		q.orderAsc('createddate');
@@ -110,10 +118,13 @@
       		$(document).ready(function() {
 
 	      		$("#submitButton").on("click", function() {
-	      		
+	      			validateForm();
 			  		submitForm();
 			  		refreshTable();
-			  		
+	      		});
+	      		
+	      		$("#refreshButton").on("click", function() {
+		      		refreshTable();
 	      		});
 	      		
       		});//$(document).ready()
@@ -157,6 +168,7 @@
 			        <input type="date" id="date">
 			        <br>
 			        <button id="submitButton" class="btn btn-primary">Submit</button>
+			        <button id="refreshButton" class="btn btn-info">Refresh</button>
 					<h4>Result:</h4><div id="debugOutput"></div>
 					
 				</div>
