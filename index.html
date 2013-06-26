@@ -34,11 +34,6 @@
       		var Datas = StackMob.Collection.extend({
 	      		model : Data
       		});
-
-      		/**
-      		 * Global Variables
-      		 */
-      		//var list; /* results from query */
       		
       		/*****************************************************
       		 * Custom Functions
@@ -58,7 +53,7 @@
 					radiotwo: document.getElementById("radioTwo").checked,
 					integer: document.getElementById("integer").value,
 					date: document.getElementById("date").value
-				}); //keys must remain lowercase
+				});//above keys must remain lowercase
 				
 				data.create({
 					success: function(model, result, options) {
@@ -77,41 +72,35 @@
       		 * Refreshes the data entry table
       		 */
       		function refreshTable() {
-      		
+		  		document.getElementById("tableBody").innerHTML = "Refreshing..";
+		  		
 	      		var q = new StackMob.Collection.Query();
 		  		q.orderAsc('createddate');
 		  		
 		  		var list = new Datas();
 		  		list.query(q, {
 			  		success: function(collection) {
-				  		console.debug(collection.toJSON());
-				  		console.log(list.length + " elements in the list.");
-				  		
+			  		
+						var array = collection.toJSON();
+
 					  	for (var i = 0; i < list.length; i++) {
-/*
+					  		var item = array[i];
+					  		
 					  		var str = "<tr>";
-					  		var item = list[i];
-					  		str += "<td>" + item.get('singleline') + "</td>";
-					  		str += "<td>" + list[i].get('multiline') + "</td>";
-					  		str += "<td>" + list[i].get('list') + "</td>";
-					  		str += "<td>" + list[i].get('radioOne') + "</td>";
-					  		str += "<td>" + list[i].get('radioTwo') + "</td>";
-					  		str += "<td>" + list[i].get('integer') + "</td>";
-					  		str += "<td>" + list[i].get('date') + "</td>";
-		
+					  		str += "<td>" + item.singleline + "</td>";
+					  		str += "<td>" + item.multiline + "</td>";
+					  		str += "<td>" + item.list + "</td>";
+					  		str += "<td>" + item.radioone + "</td>";
+					  		str += "<td>" + item.radiotwo + "</td>";
+					  		str += "<td>" + item.integer + "</td>";
+					  		str += "<td>" + item.date + "</td>";
 					  		str += "</tr>";
 					  		
 					  		document.getElementById("tableBody").innerHTML += str;
-					  		console.log(str);
-		
-							console.log("refreshTable()");
-							console.log(list[i].get('singleline'));
-*/
+					  		/* console.log(str); */
 						}
 			  		}
 		  		});
-		  		
-
       		}
       		
       		/*****************************************************
@@ -143,7 +132,7 @@
 			    	<p>Single line text:</p>
 			    	<input type="text" id="singleLine">
 			    	
-			        <p>Multi-line text:</p>
+			        <p>Multi line text:</p>
 			        <textarea id="multiLine" rows="3"></textarea>
 			        <br>
 			        List:
@@ -181,7 +170,7 @@
 							</tr>
 							<tr>
 								<th>Single</th>
-								<th>Mult</th>
+								<th>Multi</th>
 								<th>List</th>
 								<th>Radio1</th>
 								<th>Radio2</th>
@@ -190,37 +179,7 @@
 							</tr>
 						</thead>
 						<tbody id="tableBody">
-						<!-- The following table rows are placeholders for eventual data -->
-<!--
-						<tr>
-							<td>java single</td>
-							<td>java multi</td>
-							<td>java list</td>
-							<td>java radio1</td>
-							<td>java radio2</td>
-							<td>java integer</td>
-							<td>java date</td>
-						</tr>
-						<tr>
-							<td>java single</td>
-							<td>java multi</td>
-							<td>java list</td>
-							<td>java radio1</td>
-							<td>java radio2</td>
-							<td>java integer</td>
-							<td>java date</td>
-						</tr>
-						<tr>
-							<td>java single</td>
-							<td>java multi</td>
-							<td>java list</td>
-							<td>java radio1</td>
-							<td>java radio2</td>
-							<td>java integer</td>
-							<td>java date</td>
-						</tr>
--->
-						<!-- End of row placeholder data -->
+							<!-- Entries will be placed here via JavaScript -->
 						</tbody>
 					</table>
 					
