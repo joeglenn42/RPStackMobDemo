@@ -44,7 +44,11 @@
 	  		 * Validates the form and verifies required fields
 	  		 */
 	  		 function validateForm() {
-		  		 
+		  		 console.log("Validating form");
+		  		 /*
+		  		 .
+		  		 .
+		  		 */
 	  		 }
 
 	  		/**
@@ -80,11 +84,15 @@
       		 * Refreshes the data entry table
       		 */
       		function refreshTable() {
+      		
+		  		//clear table
 		  		document.getElementById("tableBody").innerHTML = "";
-		  		
+
+		  		//create query by creation date
 	      		var q = new StackMob.Collection.Query();
 		  		q.orderAsc('createddate');
 		  		
+		  		//execute query
 		  		var list = new Datas();
 		  		list.query(q, {
 			  		success: function(collection) {
@@ -95,6 +103,7 @@
 					  		var item = array[i];
 					  		
 					  		var str = "<tr>";
+					  		str += "<td id='" + item.data_id + "'><i class='icon-remove'></td>";
 					  		str += "<td>" + item.singleline + "</td>";
 					  		str += "<td>" + item.multiline + "</td>";
 					  		str += "<td>" + item.list + "</td>";
@@ -107,9 +116,24 @@
 					  		document.getElementById("tableBody").innerHTML += str;
 					  		/* console.log(str); */
 						}
+			  		},
+			  		error: function() {
+				  		document.getElementById("tableBody").innerHTML = "<h2 class='text-error'>Failured to refresh!</h2>"
 			  		}
 		  		});
       		}
+      		
+      		/**
+      		 * Delete Row
+      		 * Deletes the selected row from the table
+      		 */
+      		 function deleteRow(id) {
+	      		 console.log("Deleting row with id of" + id);
+	      		 /*
+	      		 .
+	      		 .
+	      		 */
+      		 }
       		
       		/*****************************************************
       		 * Document Ready
@@ -117,12 +141,17 @@
       		
       		$(document).ready(function() {
 
+		  		//populate the table
+		  		refreshTable();
+		  		
+		  		//setup submit button
 	      		$("#submitButton").on("click", function() {
 	      			validateForm();
 			  		submitForm();
 			  		refreshTable();
 	      		});
 	      		
+	      		//setup refresh button
 	      		$("#refreshButton").on("click", function() {
 		      		refreshTable();
 	      		});
@@ -180,7 +209,8 @@
 							<tr>
 								<th colspan="7">Data on StackMob</th>
 							</tr>
-							<tr>
+							<tr id="tableHeader">
+								<th>Delete</th>
 								<th>Single</th>
 								<th>Multi</th>
 								<th>List</th>
